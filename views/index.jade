@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  | 계속 이어서 쓴 것 같겠지만
+  | 지금 나는 이걸 하나 내려 썼다.
+  | jade 문법이라고 한다.
+
+  p
+  - if (isTrue)
+    div 이게 사실이라면 나는 정수진이다
+  - else
+    span 사실이 아니라는걸 쓰고 있는 지금 span에 쓴다.
+
+
+  p
+  each a, i in a_list
+    li #{i} : #{a}
+
+
+  //button(onclick=) Click
+  a(href="/users") USERLIST
+
+  p Edited by #{name}
+
