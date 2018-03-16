@@ -8,12 +8,11 @@ router.get('/', function(req, res, next) {
   var table = "user";
   var param = [];
 
-  query.select(table, function(value) {
-    console.log("------")
-    console.log()
-
-
-    res.send("++" + JSON.stringify(value))
+  query.select(table, function(result) {
+    res.send(JSON.stringify(result))
+    /* TODO
+     * res.render('user', { 로 구현해보기
+     * */
   });
 
 
