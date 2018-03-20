@@ -16,7 +16,23 @@ function query() {
             cb(results);
           }
       )
-    }
+    },
+
+    searchByUsername: function(table, username, cb) {
+      client.query('SELECT * FROM ' + table + ' WHERE id = ?', [username], function(err, results, fields) {
+            if (err) throw err;
+            cb(results);
+          }
+      )
+    },
+
+    insert: function (table, params, cb) {
+      client.query('INSERT INTO ' + table + ' (id, pw) VALUES (?,?)', params, function(err, results, fields) {
+            if (err) throw err;
+            cb(results);
+          }
+      )
+    },
 
   }
 }

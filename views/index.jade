@@ -2,6 +2,26 @@ extends layout
 
 block content
   h1= title
+
+  form(action='/enterChat', method='POST')
+    label(for='username') Input Your Nickname
+    br
+    br
+    input(type='text', id='username', name='username')
+    input(type='submit', value='Enter!')
+
+  script(type='text/javascript').
+    $(document).ready(function() {
+      $('form').submit(function(e) {
+        if($.trim($('#username').val())==='') {
+          alert('Please your name');
+         return false;
+        }
+      });
+    });
+
+  p Edited by #{name}
+//
   p Welcome to #{title}
   | 계속 이어서 쓴 것 같겠지만
   | 지금 나는 이걸 하나 내려 썼다.
@@ -25,6 +45,8 @@ block content
     a(href="/users") USERLIST
   div
     a(href="/readFile") READ FILE
+  div
+    a(href="/sock") SOCKET.IO
 
-  p Edited by #{name}
+
 
