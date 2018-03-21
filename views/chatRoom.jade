@@ -1,51 +1,71 @@
 extends layout
 block content
-  h1= group_name
-  input(type='hidden' value='#{group_id}')#group_id
 
-  #chatBox(style='width: 87%; height: 500px; overflow: auto; border: 1px solid #000; float: left; margin-right: 10px;')
+  - if (!isSuccess)
+      script.
+        alert("방에 못들어감");
+        location.href='/chatList';
+  - else
 
-  div(style='width: 10%; height: 500px; border: 1px solid #000;overflow: auto;')
-    p MEMBER
-    ul#memberList
-    each member, i in memberList
-      li #{member}
-  form
-    span#username #{username}
-    input(type='text', style='width: 300px;')#messageBox
-    input(type='submit', value='send')
+      h1= room_name
+        input#leave(type='button', value='OUT')
 
-  script(type='text/javascript', src='/socket.io/socket.io.js')
-  script(type='text/javascript').
-    $(document).ready(function() {
-      var room = io.connect('/chatRoom');
-      var roomId = $('#group_id').val();
-      var roomName = '#{group_name}';
-      console.log(roomName)
-      var chatBox = $('#chatBox');
-      var messageBox = $('#messageBox')
-      var username = $('#username').text()
+      input(type='hidden' value='#{room_id}')#room_id
 
-      function showMessage(msg) {
-      console.log(msg)
-        chatBox.append($('p').text(msg));
-        chatBox.scrollTop(chatBox.height());
-      }
+      #chatBox(style='width: 87%; height: 500px; overflow: auto; border: 1px solid #000; float: left; margin-right: 10px;')
 
-      room.on('connect', function() {
-        console.log('client connect')
-        room.emit('join', {roomId: roomId, roomName: roomName, username: username});
-      });
+      div(style='width: 10%; height: 500px; border: 1px solid #000;overflow: auto;')
+        p MEMBER
+          ul#memberList
+          //each member, i in memberList
+          //  li #{member}
+      form
+        span#username #{username}
+        input(type='text', style='width: 300px;')#messageBox
+        input(type='submit', value='send')
 
-      room.on('joined', function(data) {
-        console.log('client joined')
-        if (data.isSuccess) {
-          showMessage(data.username + 'now entered.');
-        }
-      })
+        script(type='text/javascript', src='/socket.io/socket.io.js')
 
-    });
+        script(type='text/javascript').
+          $(document).ready(function () {
+            var room = io.connect('/chatRoom');
+            var room_id = $('#room_id').val();
+            var room_name = '#{room_name}';
+            var chatBox = $('#chatBox');
+            var messageBox = $('#messageBox');
+            var username = $('#username').text();
 
+            function showMessage(msg) {
+              console.log(msg)
+              chatBox.append($('<p>').text(msg));
+              chatBox.scrollTop(chatBox.height());
+            }
 
+            $('form').submit(function(e) {
+              e.preventDefault();
+                var msg = messageBox.val();
 
+                if ($.trim(msg) !== '') {
+                  showMessage('[' + username + '] ' + msg);
+                  room.json.send({username: username, msg: msg});
+                  messageBox.val('');
+              }
+            });
+
+            room.on('connect', function () {
+              console.log('client connect')
+              room.emit('join', {room_id: room_id, room_name: room_name, username: username});
+            });
+
+            room.on('joined', function (data) {
+              console.log('client joined')
+              if (data.isSuccess) {
+                showMessage(data.username + ' now entered.');
+              }
+            });
+
+            room.on('message', function(data) {
+              showMessage('[' + data.username +  '] ' + data.msg);
+            });
+          });
 

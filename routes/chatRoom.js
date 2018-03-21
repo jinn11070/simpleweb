@@ -3,21 +3,28 @@ var router = express.Router();
 
 var chatInfo = require('../config/chatInfo')
 
-router.post('/', function(req, res) {
+router.get('/chatRoom/:id/:name', function(req, res) {
+  var isSuccess = false;
 
-  var group = JSON.parse(req.body.group);
-  var group_id = group.group_id;
-  var group_name = group.group_name;
-  var username = group.user_id;
+  var room_id = req.params.id;
+  var room_name = req.params.name;
 
-  chatInfo.addRoom(group_id);
-  req.session.addRoom = group_id;
+  // console.log("********************************************" + chatInfo.hasRoom(room_id))
+  // console.log(room_id)
+  // console.log(room_name)
+
+  if (chatInfo.hasRoom(room_id)) {
+    isSuccess = true;
+  }
+
+  // console.log("---===req.session.username===req.session.username")
+  // console.log(req.session.username)
 
   res.render('chatRoom', {
-    group_id: group_id,
-    group_name: group_name,
-    username: username,
-    memberList: chatInfo.userList
+    isSuccess: isSuccess,
+    room_id: room_id,
+    room_name: room_name,
+    username: req.session.username
   })
 });
 

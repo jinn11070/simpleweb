@@ -12,6 +12,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var readFile = require('./routes/readFile');
 var chatList= require('./routes/chatList');
+var makeRoom= require('./routes/makeRoom');
 var chatRoom= require('./routes/chatRoom');
 var sock = require('./routes/sock');
 
@@ -46,7 +47,8 @@ app.use('/readFile', readFile);
 app.use('/sock', sock(io));
 
 app.use('/chatList', chatList);
-app.use('/chatRoom', chatRoom);
+app.use('/makeRoom', makeRoom);
+app.all('/chatRoom/*', chatRoom);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

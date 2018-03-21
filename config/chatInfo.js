@@ -27,7 +27,7 @@ var chatInfo = module.exports = {
     console.log("---------------------")
     console.log(this.roomList)
     var roomList = this.roomList.filter(function(room) {
-      return room.name === roomId;
+      return room.id === roomId;
     });
 
     if (roomList.length > 0) {
@@ -38,7 +38,32 @@ var chatInfo = module.exports = {
   },
   addRoom: function(roomId) {
     console.log("addRoom:" + roomId)
-    this.roomList.push({name: roomId, members: []});
-  }
+    this.roomList.push({id: roomId, members: []});
+  },
+  hasMembers: function(members, username) {
+    return members.some(function(d) {
+      return d === username;
+    });
+  },
+  joinRoom: function(roomId, username) {
+    var roomList = this.roomList.filter(function(room) {
+      return room.id === roomId;
+    });
+
+    console.log(roomList[0])
+    if (!this.hasMembers(roomList[0].members, username)) {
+      roomList[0].members.push(username);
+    }
+  },
+  leaveRoom: function(roomId, username) {
+    var roomList = this.roomList.filter(function(room) {
+      return room.id === roomId;
+    });
+    roomList[0].members.forEach(function(d, i, arr) {
+      if (d === username) {
+        arr.splice(i, 1);
+      }
+    })
+  },
 }
 

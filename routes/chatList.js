@@ -5,12 +5,27 @@ var async = require('async');
 
 var chatInfo = require('../config/chatInfo')
 
-var username = "";
-var groupList = [];
+router.get('/', function(req, res) {
+  if (req.session.username) {
+
+    query.selectGroupByUsername(username, function(result) {
+      var params = {
+        "isSuccess": true,
+        "username": req.session.username,
+        "groupList": result
+      }
+
+      res.render('chatList', {
+        title: "CHATLIST",
+        params: params
+      })
+    })
+  }
+});
 
 router.post('/', function(req, res, next) {
   var isSuccess = false;
-  username = req.body.username;
+  var username = req.body.username;
 
   function selectUser(cb) {
     if (username && username.trim() !== '') {
@@ -18,8 +33,10 @@ router.post('/', function(req, res, next) {
       if (!chatInfo.hasUser(username)) {
         chatInfo.addUser(username);
         req.session.username = username;
-        cb(null, username)
+        isSuccess = true;
       }
+
+      cb(null, username)
     }
   }
 
@@ -28,27 +45,28 @@ router.post('/', function(req, res, next) {
 
     query.selectGroupByUsername(username, function(result) {
       var params = {
-        "isSuccess": true,
+        "isSuccess": isSuccess,
         "username": username,
         "groupList": result
       }
 
-      cb(null, params)
+      res.render('chatList', {
+        title: "CHATLIST",
+        params: params
+      })
     })
 
   }
 
   function renderRes(params) {
-    res.render('chatList', {
-      title: "CHATLIST",
-      params: params
-    })
+
+    console.log(params)
+
   }
 
   async.waterfall([
     selectUser,
     selectGroup,
-    renderRes
   ], function(err) {
     console.log(err)
   })
