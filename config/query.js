@@ -18,8 +18,15 @@ function query() {
       )
     },
 
-    searchByUsername: function(table, username, cb) {
+    selectByUsername: function(table, username, cb) {
       client.query('SELECT * FROM ' + table + ' WHERE id = ?', [username], function(err, results, fields) {
+            if (err) throw err;
+            cb(results);
+          }
+      )
+    },
+    selectGroupByUsername: function(username, cb) {
+      client.query('select a.*, b.group_name from group_members a, group_info b where a.user_id = ? and a.group_id = b.id', [username], function(err, results, fields) {
             if (err) throw err;
             cb(results);
           }

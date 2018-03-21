@@ -1,25 +1,44 @@
 var query = require('../config/query')()
 
-module.exports = chatInfo;
+var chatInfo = module.exports = {
+  userList: [],
+  roomList: [],
+  hasUser: function(username) {
+    var userList = this.userList.filter(function(user) {
+      return user === username;
+    });
 
-function chatInfo() {
-
-  var table = "member";
-
-  return {
-    userList: [],
-    selectUser: function(username, cb) {
-      /*Mysql selection 이 아이디를 가진 사용자가 존재하는지*/
-      query.searchByUsername(table, username, function(result) {
-        this.userList = result;
-        cb(result);
-      });
-    },
-    insertUser: function(username, cb) {
-      query.insert(table, [username, username], function(result) {
-        cb(result)
-      });
+    if (userList.length > 0) {
+      return true;
+    } else {
+      return false;
     }
+  },
+  addUser: function(username) {
+    this.userList.push(username);
+  },
+  selectUserGroup: function(username, cb) {
+    query.selectGroupByUsername(username, function(result) {
+      console.log(result)
+      cb(result)
+    })
+  },
+  hasRoom: function(roomId) {
+    console.log("---------------------")
+    console.log(this.roomList)
+    var roomList = this.roomList.filter(function(room) {
+      return room.name === roomId;
+    });
+
+    if (roomList.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+  addRoom: function(roomId) {
+    console.log("addRoom:" + roomId)
+    this.roomList.push({name: roomId, members: []});
   }
 }
 

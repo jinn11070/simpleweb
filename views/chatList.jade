@@ -1,0 +1,33 @@
+extends layout
+block content
+
+  h1= params.username
+
+  - if (params.isSuccess)
+    h2 GROUP CHAT ROOM LIST
+
+    form(action='/chatRoom', method='post')
+      each group, i in params.groupList
+        li #{group.group_name}
+          button(type='submit', name='group', value='#{JSON.stringify(group)}') ENTER
+          input(type='hidden', name="username", value='#{params.username}')
+
+    p WELCOME #{params.username}!
+
+    script(type='text/javascript').
+      $(document).ready(function() {
+        console.log("form(action='/chatRoom', method='post')")
+        $('form').on('submit', function (e) {
+          return true;
+        });
+      });
+
+  - else
+    - if (username === '')
+      script(type='text/javascript').
+        alert('Name is Null. Please reinput user name');
+        history.go(-1);
+    - else
+      script(type='text/javascript').
+        alert('Duplicate Name. Please reinput user name');
+        history.go(-1);

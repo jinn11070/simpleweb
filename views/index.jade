@@ -3,11 +3,11 @@ extends layout
 block content
   h1= title
 
-  form(action='/enterChat', method='POST')
+  form(action='/chatList', method='POST')
     label(for='username') Input Your Nickname
     br
     br
-    input(type='text', id='username', name='username')
+    input(type='text', id='username', name='username', value='sjjung')
     input(type='submit', value='Enter!')
 
   script(type='text/javascript').

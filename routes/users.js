@@ -29,7 +29,7 @@ router.get('/', function(req, res, next) {
      * *!/
   });*/
 
- /* query.searchByUsername(table, username, function(result) {
+ /* query.selectByUsername(table, username, function(result) {
     JSON.stringify(result)
 
     userList = result
