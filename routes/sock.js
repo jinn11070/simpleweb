@@ -23,10 +23,12 @@ module.exports = function(io){
             joinedRoom = clientData.room_id;
 
             socket.join(joinedRoom);
-            socket.emit('joined', {isSuccess: true, username: clientData.username});
-            socket.broadcast.to(joinedRoom).emit('joined', {isSuccess: true, username: clientData.username});
-
             chatInfo.joinRoom(joinedRoom, clientData.username);
+
+            socket.emit('joined', {isSuccess: true, username: clientData.username, memberList: chatInfo.getMembers(joinedRoom)});
+            socket.broadcast.to(joinedRoom).emit('joined', {isSuccess: true, username: clientData.username, memberList: chatInfo.getMembers(joinedRoom)});
+
+
           } else {
             socket.emit('joined', {isSuccess: false})
           }

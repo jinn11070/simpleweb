@@ -58,12 +58,6 @@ router.post('/', function(req, res, next) {
 
   }
 
-  function renderRes(params) {
-
-    console.log(params)
-
-  }
-
   async.waterfall([
     selectUser,
     selectGroup,

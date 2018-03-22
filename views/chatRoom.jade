@@ -17,8 +17,8 @@ block content
       div(style='width: 10%; height: 500px; border: 1px solid #000;overflow: auto;')
         p MEMBER
           ul#memberList
-          //each member, i in memberList
-          //  li #{member}
+            //each member, i in memberList
+            //  li #{member}
       form
         span#username #{username}
         input(type='text', style='width: 300px;')#messageBox
@@ -41,6 +41,14 @@ block content
               chatBox.scrollTop(chatBox.height());
             }
 
+            function showMembers(memberList) {
+              console.log(memberList)
+              $("#memberList").html('')
+              for (var i = 0; i < memberList.length; i++) {
+                $("#memberList").append('<li>' + memberList[i] + '</li>');
+              }
+            }
+
             // 내 창에 보이게 함.
             $('form').submit(function(e) {
               e.preventDefault();
@@ -50,7 +58,8 @@ block content
                   showMessage('[ME:<b> ' + username + '</b>] ' + msg);
                   room.json.send({username: username, msg: msg});
                   messageBox.val('');
-              }
+                  messageBox.focus();
+                }
             });
 
             room.on('connect', function () {
@@ -62,6 +71,7 @@ block content
               console.log('client joined')
               if (data.isSuccess) {
                 showMessage(data.username + ' now entered.');
+                showMembers(data.memberList)
               }
             });
 

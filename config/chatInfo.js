@@ -17,15 +17,7 @@ var chatInfo = module.exports = {
   addUser: function(username) {
     this.userList.push(username);
   },
-  selectUserGroup: function(username, cb) {
-    query.selectGroupByUsername(username, function(result) {
-      console.log(result)
-      cb(result)
-    })
-  },
   hasRoom: function(roomId) {
-    console.log("---------------------")
-    console.log(this.roomList)
     var roomList = this.roomList.filter(function(room) {
       return room.id === roomId;
     });
@@ -36,30 +28,38 @@ var chatInfo = module.exports = {
       return false;
     }
   },
-  addRoom: function(roomId) {
-    console.log("addRoom:" + roomId)
-    this.roomList.push({id: roomId, members: []});
+  addRoom: function(room_id) {
+    console.log("addRoom:" + room_id)
+    this.roomList.push({id: room_id, memberList: []});
   },
   hasMembers: function(members, username) {
     return members.some(function(d) {
       return d === username;
     });
   },
-  joinRoom: function(roomId, username) {
+  getMembers: function(room_id) {
     var roomList = this.roomList.filter(function(room) {
-      return room.id === roomId;
+      return room.id === room_id;
     });
 
-    console.log(roomList[0])
-    if (!this.hasMembers(roomList[0].members, username)) {
-      roomList[0].members.push(username);
-    }
+    return roomList[0].memberList
   },
-  leaveRoom: function(roomId, username) {
+  joinRoom: function(room_id, username) {
     var roomList = this.roomList.filter(function(room) {
-      return room.id === roomId;
+      return room.id === room_id;
     });
-    roomList[0].members.forEach(function(d, i, arr) {
+
+    if (!this.hasMembers(roomList[0].memberList, username)) {
+      roomList[0].memberList.push(username);
+    }
+
+    console.log(roomList)
+  },
+  leaveRoom: function(room_id, username) {
+    var roomList = this.roomList.filter(function(room) {
+      return room.id === room_id;
+    });
+    roomList[0].memberList.forEach(function(d, i, arr) {
       if (d === username) {
         arr.splice(i, 1);
       }
