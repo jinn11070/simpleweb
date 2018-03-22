@@ -32,6 +32,7 @@ module.exports = function(io){
           }
         });
 
+        // 클라이언트가 입력한 메세지 받아서 다른 클라이언트 창에 뿌려줌. (broadcast)
         socket.on('message', function(clientData) {
           if (joinedRoom) {
             socket.broadcast.to(joinedRoom).json.send(clientData);

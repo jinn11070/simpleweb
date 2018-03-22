@@ -37,16 +37,17 @@ block content
 
             function showMessage(msg) {
               console.log(msg)
-              chatBox.append($('<p>').text(msg));
+              chatBox.append($('<p>').html(msg));
               chatBox.scrollTop(chatBox.height());
             }
 
+            // 내 창에 보이게 함.
             $('form').submit(function(e) {
               e.preventDefault();
                 var msg = messageBox.val();
 
                 if ($.trim(msg) !== '') {
-                  showMessage('[' + username + '] ' + msg);
+                  showMessage('[ME:<b> ' + username + '</b>] ' + msg);
                   room.json.send({username: username, msg: msg});
                   messageBox.val('');
               }
@@ -64,8 +65,9 @@ block content
               }
             });
 
+            // 서버로 보냄.
             room.on('message', function(data) {
-              showMessage('[' + data.username +  '] ' + data.msg);
+              showMessage('[FROM:' + data.username +  '] ' + data.msg);
             });
           });
 
