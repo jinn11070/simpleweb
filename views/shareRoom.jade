@@ -24,10 +24,6 @@ block content
       $(document).ready(function () {
         var room = io.connect("/");
 
-        //console.log(room)
-
-        //room.emit('test', 'ya!!!');
-
         var room_id = '#{group_id}';
         var room_name = '#{group_name}';
         var chatBox = $('#chatBox');
@@ -35,16 +31,10 @@ block content
         var myname = $("#myname").text();
 
         function showMessage(userId, msg) {
-          console.log(msg)
 
           var id = '#' + userId.split('.').join('\\.').replace(/(\@)/g, '\\@');
 
-          console.log(id)
-          console.log($(id).attr("id"))
-          console.log("000:" + $(id).text())
-
           $(id).html(msg)
-          //chatBox.scrollTop(chatBox.height());
         }
 
           /*function showMembers(memberList) {
@@ -88,4 +78,3 @@ block content
         });
 
       });
-

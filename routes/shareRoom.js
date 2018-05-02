@@ -18,7 +18,7 @@ router.post('/shareRoom/:id', function(req, res) {
 
     query.selectByUserId(sessionUserId, function(user) {
       // console.log(JSON.stringify(user))
-      cb(null, user[0].phone);
+      cb(null, user.phone);
     });
   }
   /*1. 방 정보 가져오기 */

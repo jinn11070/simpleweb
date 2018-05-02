@@ -25,13 +25,6 @@ var chatInfo = require('../config/chatInfo')
 // });
 
 router.post('/', function(req, res, next) {
-
-  console.log("로그인옴")
-
-  // var isSuccess = false;
-  // var userId = req.body.userId;
-  // var groupId = '402882c8628629d10162863032880002';
-
   var object = {
     isSuccess: false,
     user_id: req.body.userId,
@@ -92,12 +85,8 @@ router.post('/', function(req, res, next) {
   // }
 
   /*4. 세션에 넣기*/
-
-  var io = req.app.get('socketio');
-
   req.session.userId = req.body.userId;
   req.session.groupId = object.group_id;
-    // req.session.members = members;
 
   res.render('login', object)
 

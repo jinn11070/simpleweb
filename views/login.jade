@@ -9,11 +9,9 @@ block content
   script(type='text/javascript').
     $(document).ready(function () {
 
-      console.log("#{user_id}")
       var room = io.connect("/")
-      //var room = io.connect('/login')
 
-      room.emit('sendUserId', { userId: "#{user_id}", phone: "#{phone}"})
+      room.emit('sendUserId', { userId: "#{user_id}" })
       room.on('saveSocket', function (data) {
         $('#phone').val(data.phone);
 

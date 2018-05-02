@@ -6,7 +6,7 @@ module.exports = function(io){
   var Room = io
       .of('/chatRoom')
       .on('connection', function(socket) {
-        console.log('***********user connected');
+        //console.log('***********user connected');
 
         var joinedRoom = null;
         socket.on('join', function(clientData) {
@@ -14,9 +14,9 @@ module.exports = function(io){
           // console.log("sock.js--------------")
           // console.log(chatInfo.userList)
           // console.log(chatInfo.roomList)
-          console.log(clientData.room_id)
-          console.log(clientData.username)
-          console.log("chatInfo.hasRoom(clientData.roomId):" + chatInfo.hasRoom(clientData.room_id))
+          // console.log(clientData.room_id)
+          // console.log(clientData.username)
+          // console.log("chatInfo.hasRoom(clientData.roomId):" + chatInfo.hasRoom(clientData.room_id))
 
 
           if (chatInfo.hasRoom(clientData.room_id)) {

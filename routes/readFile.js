@@ -8,9 +8,7 @@ router.get('/', function(req, res, next) {
   var filename = path.join(process.cwd(), '/test/mrkim.txt');
   // var filename = path.join(process.cwd(), req.url);
 
-  console.log(filename)
   fs.exists(filename, function(isExist) {
-    console.log(isExist)
     if (!isExist) {
       res.writeHead(404, {"content-Type": "text/plain"});
       res.write("404 NotFound\n");

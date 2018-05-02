@@ -12,13 +12,10 @@ router.post('/', function(req, res) {
   var username = group.user_id;
 
   if (!chatInfo.hasRoom(group_id)) {
-    console.log("방없음.")
     chatInfo.addRoom(group_id);
     req.session.roomname = group_id;
     // isSuccess = true;
   }
-
-  console.log("방있음.")
 
   res.render('makeRoom', {
     // isSuccess: isSuccess,

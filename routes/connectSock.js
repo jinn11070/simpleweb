@@ -4,36 +4,36 @@ var query = require('../config/query')()
 // var session = require('express-session')
 
 module.exports = function(io){
-  console.log("옴?")
   var Room = io.sockets;
 
   // var Room = io.of("/login");
   var socket_ids = [];
   var count = 0;
 
-  function registerUser(socket, userPhone){
+  function registerUser(socket, userInfo){
     // socket_id와 userId 테이블을 셋업
     var prevPhone = socket.prevPhone;
-
     if(prevPhone !== undefined) delete socket_ids[prevPhone];
-    socket_ids[userPhone.phone] = socket.id;
-    socket.prevPhone = userPhone.phone;
 
-    // Room.emit('phoneList',{phones:Object.keys(socket_ids)});
-    // Room.emit('userPhone', userPhone)
+    query.selectByUserId(userInfo.userId, function(data) {
 
-    /* save DB */
-    query.saveSocketId(socket.prevPhone, socket.id)
+      var userId = data.email;
+      var phone = data.phone;
+
+      socket_ids[phone] = socket.id;
+      socket.prevPhone = phone;
+
+      socket.emit('saveSocket', {userId: userId, phone: socket.prevPhone});
+      /* save DB */
+      query.saveSocketId(socket.prevPhone, socket.id)
+    })
   }
 
   Room.on('connection', function(socket) {
     console.log("********connect")
     socket.on('sendUserId', function(data) {
       var userId = data.userId;
-      var phoneNumber = data.phone;
-
-      socket.emit('saveSocket', {userId: userId, phone: phoneNumber});
-      registerUser(socket, {userId: userId, phone: phoneNumber});
+      registerUser(socket, {userId: userId});
     })
 
       /*socket.on('disconnect',function(data){

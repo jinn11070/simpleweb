@@ -11,8 +11,6 @@ module.exports = query;
 function query() {
   return {
     saveSocketId: function(phone, socketId) {
-
-      // console.log("saveSocketId: function(phone, socketId) {")
       client.query('UPDATE installer SET socket_id =? WHERE phone = ?', [socketId, phone], function(err, results, fields) {
         if (err) throw err;
       })
@@ -60,14 +58,9 @@ function query() {
     },
 
     selectByUserId: function(userId, cb) {
-
-      // console.log(userId)
-
       client.query('SELECT * FROM user WHERE email = ?', [userId], function(err, results, fields) {
             if (err) throw err;
-
-            // console.log(results)
-            cb(results);
+            cb(results[0]);
           }
       )
     },
@@ -89,45 +82,3 @@ function query() {
 
   }
 }
-
-/*
- var query = module.exports = {
- insert: function (member, res) {
- client.query(
- /!*sql*!/
- 'INSERT INTO ' + TABLE + ' SET id = ? , pw = ?',
-
- /!*param*!/
- [member.id, member.pw],
-
- /!*collback*!/
- query.select(member, res, err)
- )
- },
-
- select: function(member, res, err) {
- client.query(
- /!*sql*!/
- 'SELECT * FROM ' + TABLE + ' WHERE id = ?',
-
- /!*param*!/
- [member.id],
-
- /!*collback*!/
- query.result(res, err, results, fields)
-
- )
- },
-
- result: function(res, err, results, fields) {
- if (err) throw err;
- res.render('join-result', {
- 'title': '회원조회',
- 'id': results[0].id,
- 'usr_id': results[0].usr_id,
- 'usr_nm': results[0].usr_nm
- })
- }
- }
- */
-

@@ -29,7 +29,6 @@ var chatInfo = module.exports = {
     }
   },
   addRoom: function(room_id) {
-    console.log("addRoom:" + room_id)
     this.roomList.push({id: room_id, memberList: []});
   },
   hasMembers: function(members, username) {
@@ -52,8 +51,6 @@ var chatInfo = module.exports = {
     if (!this.hasMembers(roomList[0].memberList, username)) {
       roomList[0].memberList.push(username);
     }
-
-    console.log(roomList)
   },
   leaveRoom: function(room_id, username) {
     var roomList = this.roomList.filter(function(room) {
