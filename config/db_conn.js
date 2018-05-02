@@ -1,5 +1,5 @@
 var mysql = require('mysql');
-var configLocal = require('./db_info')().local;
+var configLocal = require('./db_info')().centos;
 
 module.exports = dbConn;
 

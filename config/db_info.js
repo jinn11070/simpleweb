@@ -8,6 +8,13 @@ function dbInfo() {
       user: 'root',
       password: '',
       database: 'sm_prj'
+    },
+    centos: {
+      host: '13.125.103.196',
+      port: '3309',
+      user: 'root',
+      password: '',
+      database: 'sm_prj'
     }
   }
 }

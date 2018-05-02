@@ -35,8 +35,10 @@ server.on('listening', onListening);
 
 var io = app.io;
 
-io.attach(server);
+// io.attach(server);
 
+
+io.listen(server);
 /**
  * Normalize a port into a number, string, or false.
  */

@@ -1,0 +1,91 @@
+extends layout
+block content
+  h1= group_name
+    input#leave(type='button', value='OUT')
+
+  #chatBox(style='width: 87%; height: 600px; overflow: auto; border: 1px solid #000; float: left; margin-right: 10px;position: absolute;')
+    each member, i in members
+      div(id='#{member.user_id}', style='width: fit-content;height: fit-content;border: 1px solid #000;overflow: auto;position: relative;left: #{member.id * 100}px;top: #{member.id * 100}px;') #{member.user_id}
+
+
+  div(style='width: 10%; height: 600px; border: 1px solid #000;overflow: auto;')
+    p MEMBER
+      ul#members
+        each member, i in members
+          li #{member.user_id}
+
+  form
+    span#myname #{myname}
+    input(type='text', style='width: 300px;')#messageBox
+    input(type='submit', value='send')
+
+    script(type='text/javascript', src='/socket.io/socket.io.js')
+    script(type='text/javascript').
+      $(document).ready(function () {
+        var room = io.connect("/");
+
+        //console.log(room)
+
+        //room.emit('test', 'ya!!!');
+
+        var room_id = '#{group_id}';
+        var room_name = '#{group_name}';
+        var chatBox = $('#chatBox');
+        var messageBox = $('#messageBox');
+        var myname = $("#myname").text();
+
+        function showMessage(userId, msg) {
+          console.log(msg)
+
+          var id = '#' + userId.split('.').join('\\.').replace(/(\@)/g, '\\@');
+
+          console.log(id)
+          console.log($(id).attr("id"))
+          console.log("000:" + $(id).text())
+
+          $(id).html(msg)
+          //chatBox.scrollTop(chatBox.height());
+        }
+
+          /*function showMembers(memberList) {
+            console.log(memberList)
+            $("#memberList").html('')
+            for (var i = 0; i < memberList.length; i++) {
+              $("#memberList").append('<li>' + memberList[i] + '</li>');
+            }
+          }*/
+
+        // 내 창에 보이게 함.
+        $('form').submit(function (e) {
+          e.preventDefault();
+          var msg = messageBox.val();
+
+          alert(msg)
+          if ($.trim(msg) !== '') {
+            showMessage(myname, msg);
+            room.emit('send_msg', {userId: myname, msg: msg, to:'ALL'});
+            messageBox.val('');
+            messageBox.focus();
+          }
+        });
+
+        /*room.on('connect', function () {
+          console.log('client connect')
+          room.emit('join', {room_id: room_id, room_name: room_name, userId: userId});
+        });*/
+
+
+        /*room.on('joined', function (data) {
+          console.log('client joined')
+          if (data.isSuccess) {
+            alert(data.userId + ' now entered.');
+          }
+        });*/
+
+        // 서버로 보냄.
+        room.on('broadcast_msg', function (data) {
+          showMessage(data.userId, data.msg);
+        });
+
+      });
+

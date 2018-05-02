@@ -3,50 +3,26 @@ extends layout
 block content
   h1= title
 
-  form(action='/chatList', method='POST')
-    label(for='username') Input Your Nickname
+  //input#socketConn(type='button', value='socketConn')
+
+  form(action='/login', method='POST')
+    label(for='userId') Input Your Nickname
     br
     br
-    input(type='text', id='username', name='username', value='sjjung')
+    input(type='text', id='userId', name='userId', value='sjjung@gmail.com')
+    input(type='text', id='phone', name='phone', value='')
     input(type='submit', value='Enter!')
 
+  //script(type='text/javascript', src='/socket.io/socket.io.js')
   script(type='text/javascript').
-    $(document).ready(function() {
-      $('form').submit(function(e) {
-        if($.trim($('#username').val())==='') {
+    $(document).ready(function () {
+      $('form').submit(function (e) {
+        if ($.trim($('#userId').val()) === '') {
           alert('Please your name');
-         return false;
+          return false;
         }
       });
     });
 
   p Edited by #{name}
-//
-  p Welcome to #{title}
-  | 계속 이어서 쓴 것 같겠지만
-  | 지금 나는 이걸 하나 내려 썼다.
-  | jade 문법이라고 한다.
-
-  p
-  - if (isTrue)
-    div 이게 사실이라면 나는 정수진이다
-  - else
-    span 사실이 아니라는걸 쓰고 있는 지금 span에 쓴다.
-
-
-  p
-  each a, i in a_list
-    li #{i} : #{a}
-
-
-  p
-
-  div
-    a(href="/users") USERLIST
-  div
-    a(href="/readFile") READ FILE
-  div
-    a(href="/sock") SOCKET.IO
-
-
 

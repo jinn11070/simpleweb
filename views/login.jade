@@ -1,0 +1,27 @@
+extends layout
+block content
+
+  //form(action='/shareRoom/#{group_id}', method='POST')
+  //  input(type='hidden', id='socketId', name='socketId', value='')
+  //input#socketConn(type='button', value='socketConn')
+
+  script(type='text/javascript', src='/socket.io/socket.io.js')
+  script(type='text/javascript').
+    $(document).ready(function () {
+
+      console.log("#{user_id}")
+      var room = io.connect("/")
+      //var room = io.connect('/login')
+
+      room.emit('sendUserId', { userId: "#{user_id}", phone: "#{phone}"})
+      room.on('saveSocket', function (data) {
+        $('#phone').val(data.phone);
+
+        var $form = $(document.createElement('form')).css({display: 'none'}).attr("method", "POST").attr("action", '/shareRoom/#{group_id}');
+        //$form.append($input1)
+        $("body").append($form);
+
+        $form.submit();
+      });
+    });
+

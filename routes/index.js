@@ -3,6 +3,13 @@ var router = express.Router();
 
 /* GET homey page. */
 router.get('/', function(req, res, next) {
+
+  var sessionUserid = req.session.userid;
+  var sessionRoomid = req.session.roomid;
+
+  sessionUserid = (sessionUserid === undefined || sessionUserid === null) ? '없음' : sessionUserid;
+  sessionRoomid = (sessionRoomid === undefined || sessionRoomid === null) ? '없음' : sessionRoomid;
+
   res.render('index', {
     title: 'CHAT',
     name: 'SOOJIN',
@@ -12,4 +19,5 @@ router.get('/', function(req, res, next) {
 });
 
 module.exports = router;
+
 

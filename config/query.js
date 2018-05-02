@@ -10,6 +10,47 @@ module.exports = query;
 
 function query() {
   return {
+    saveSocketId: function(phone, socketId) {
+
+      // console.log("saveSocketId: function(phone, socketId) {")
+      client.query('UPDATE installer SET socket_id =? WHERE phone = ?', [socketId, phone], function(err, results, fields) {
+        if (err) throw err;
+      })
+    },
+    checkUser: function(email, cb) {
+      client.query('SELECT count(*) FROM user WHERE email = ?', [email], function(err, results, fields) {
+        if (err) throw err;
+        if (results > 0) {
+          cb(true);
+        } else {
+          cb(false)
+        }
+      })
+    },
+    selectGroup: function(groupId, cb) {
+      client.query("SELECT * FROM group_info WHERE id = ?", [groupId], function(err, results, fields) {
+        if (err) throw err;
+        cb(results)
+      });
+    },
+    selectGroupsByHostUser: function(email, cb) {
+      client.query("SELECT * FROM group_info WHERE host_email = ?", [email], function(err, results, fields) {
+        if (err) throw err;
+        cb(results)
+      });
+    },
+    selectGroupMembers: function(groupId, cb) {
+
+      client.query("select * from group_members where group_id = ?", [groupId], function(err, results, fields) {
+        if (err) throw err;
+        // var members = results.map(function(d, i) {
+        //   console.log(d.user_id)
+        //   return d.user_id;
+        // })
+
+        cb(results)
+      });
+    },
     select: function(table, cb) {
       client.query('SELECT * FROM ' + table, [], function(err, results, fields) {
             if (err) throw err;
@@ -18,9 +59,14 @@ function query() {
       )
     },
 
-    selectByUsername: function(table, username, cb) {
-      client.query('SELECT * FROM ' + table + ' WHERE id = ?', [username], function(err, results, fields) {
+    selectByUserId: function(userId, cb) {
+
+      // console.log(userId)
+
+      client.query('SELECT * FROM user WHERE email = ?', [userId], function(err, results, fields) {
             if (err) throw err;
+
+            // console.log(results)
             cb(results);
           }
       )
